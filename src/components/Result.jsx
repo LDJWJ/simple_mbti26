@@ -3,7 +3,11 @@ import { useState } from 'react'
 function Result({ result, onRestart }) {
   const [copied, setCopied] = useState(false)
 
-  const shareText = `나의 MBTI는 ${result.type}! (${result.title})\n\n주요 특성: ${result.characteristics.join(', ')}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
+  const bibleText = result.bibleCharacter
+    ? `\n\n[성경 속 닮은꼴 인물]\n${result.bibleCharacter.name}\n${result.bibleCharacter.description}`
+    : ''
+
+  const shareText = `[나의 MBTI 결과] ${result.type} - ${result.title}\n\n[성격 특징]\n${result.description}\n\n[주요 특성]\n${result.characteristics.join(', ')}${bibleText}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
 
   const handleNativeShare = () => {
     if (navigator.share) {
@@ -125,7 +129,7 @@ function Result({ result, onRestart }) {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
-            URL 복사
+            결과 복사하기
           </button>
 
           <button
