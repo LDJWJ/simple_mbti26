@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import BibleCharacterIllust from './BibleCharacterIllust'
 
 function Result({ result, onRestart }) {
   const [copied, setCopied] = useState(false)
@@ -67,7 +68,8 @@ function Result({ result, onRestart }) {
         {result.bibleCharacter && (
           <div className="bg-amber-50 rounded-2xl p-6 mb-6 border border-amber-200">
             <h3 className="font-semibold text-gray-700 mb-3 text-lg">성경 속 닮은꼴 인물</h3>
-            <p className="text-2xl font-bold text-amber-700 mb-2">
+            <BibleCharacterIllust mbtiType={result.type} />
+            <p className="text-2xl font-bold text-amber-700 mb-2 text-center">
               {result.bibleCharacter.name}
             </p>
             <p className="text-gray-600 leading-relaxed">
