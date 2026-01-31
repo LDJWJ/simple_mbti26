@@ -58,7 +58,7 @@ ${bibleInfo}
 
         if (response.status === 429) {
           if (attempt < maxRetries - 1) {
-            await new Promise(r => setTimeout(r, (attempt + 1) * 2000))
+            await new Promise(r => setTimeout(r, (attempt + 1) * 10000))
             continue
           }
           throw new Error('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.')
