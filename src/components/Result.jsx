@@ -1,4 +1,19 @@
+import { useState } from 'react'
+
 function Result({ result, onRestart }) {
+  const [copied, setCopied] = useState(false)
+
+  const shareText = `나의 MBTI는 ${result.type}! (${result.title})\n\n주요 특성: ${result.characteristics.join(', ')}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
+
+  const handleCopyURL = async () => {
+    try {
+      await navigator.clipboard.writeText(shareText)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      alert('복사에 실패했습니다. 다시 시도해주세요.')
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center p-4">
@@ -72,7 +87,23 @@ function Result({ result, onRestart }) {
           </div>
         </div>
 
+        {copied && (
+          <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl text-center">
+            ✓ 클립보드에 복사되었습니다!
+          </div>
+        )}
+
         <div className="space-y-4">
+          <button
+            onClick={handleCopyURL}
+            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            URL 복사
+          </button>
+
           <button
             onClick={onRestart}
             className="w-full bg-white border-2 border-gray-300 text-gray-700 font-bold py-4 px-6 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all"
