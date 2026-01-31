@@ -5,6 +5,18 @@ function Result({ result, onRestart }) {
 
   const shareText = `나의 MBTI는 ${result.type}! (${result.title})\n\n주요 특성: ${result.characteristics.join(', ')}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
 
+  const handleNativeShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'MBTI 테스트 결과',
+        text: `나의 MBTI는 ${result.type} (${result.title})입니다!`,
+        url: window.location.href
+      })
+    } else {
+      handleCopyURL()
+    }
+  }
+
   const handleCopyURL = async () => {
     try {
       await navigator.clipboard.writeText(shareText)
@@ -47,6 +59,18 @@ function Result({ result, onRestart }) {
             ))}
           </div>
         </div>
+
+        {result.bibleCharacter && (
+          <div className="bg-amber-50 rounded-2xl p-6 mb-6 border border-amber-200">
+            <h3 className="font-semibold text-gray-700 mb-3 text-lg">성경 속 닮은꼴 인물</h3>
+            <p className="text-2xl font-bold text-amber-700 mb-2">
+              {result.bibleCharacter.name}
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              {result.bibleCharacter.description}
+            </p>
+          </div>
+        )}
 
         <div className="bg-purple-50 rounded-2xl p-6 mb-8">
           <h3 className="font-semibold text-gray-700 mb-4 text-lg">세부 점수</h3>
@@ -102,6 +126,16 @@ function Result({ result, onRestart }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
             URL 복사
+          </button>
+
+          <button
+            onClick={handleNativeShare}
+            className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-green-500 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+            공유하기
           </button>
 
           <button
