@@ -12,7 +12,7 @@ function Result({ result, onRestart }) {
 
   const shortText = `[나의 MBTI 결과] ${result.type} - ${result.title}\n\n[주요 특성]\n${result.characteristics.join(', ')}${bibleText}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
 
-  const detailText = `[나의 MBTI 결과] ${result.type} - ${result.title}\n\n[성격 특징]\n${result.description}\n\n[주요 특성]\n${result.characteristics.join(', ')}${bibleText}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
+  const resultURL = `${window.location.origin}${window.location.pathname}?type=${result.type}`
 
   const handleCopy = async (text, type) => {
     try {
@@ -71,7 +71,7 @@ function Result({ result, onRestart }) {
           </div>
         )}
 
-        <div className="bg-purple-50 rounded-2xl p-6 mb-8">
+        {result.scores && Object.values(result.scores).some(v => v > 0) && <div className="bg-purple-50 rounded-2xl p-6 mb-8">
           <h3 className="font-semibold text-gray-700 mb-4 text-lg">세부 점수</h3>
           <div className="space-y-3">
             {[
@@ -108,7 +108,7 @@ function Result({ result, onRestart }) {
               )
             })}
           </div>
-        </div>
+        </div>}
 
         {copied && (
           <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl text-center">
@@ -128,13 +128,13 @@ function Result({ result, onRestart }) {
           </button>
 
           <button
-            onClick={() => handleCopy(detailText, '상세 결과가')}
+            onClick={() => handleCopy(resultURL, '결과 URL이')}
             className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-green-500 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
             </svg>
-            결과 상세 복사하기
+            결과 URL 복사하기
           </button>
 
           <button

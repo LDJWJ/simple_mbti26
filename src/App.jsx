@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { questionsShort, questionsFull } from './data/questions'
 import { mbtiDescriptions } from './data/results'
 import StartScreen from './components/StartScreen'
@@ -11,6 +11,18 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState({})
   const [result, setResult] = useState(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const type = params.get('type')?.toUpperCase()
+    if (type && mbtiDescriptions[type]) {
+      setResult({
+        type,
+        ...mbtiDescriptions[type],
+        scores: { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 }
+      })
+    }
+  }, [])
 
   const handleStart = (version) => {
     setQuestions(version === "full" ? questionsFull : questionsShort)
