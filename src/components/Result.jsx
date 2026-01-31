@@ -4,29 +4,22 @@ import BibleCharacterIllust from './BibleCharacterIllust'
 function Result({ result, onRestart }) {
   const [copied, setCopied] = useState(false)
 
+  const [copiedType, setCopiedType] = useState('')
+
   const bibleText = result.bibleCharacter
     ? `\n\n[성경 속 닮은꼴 인물]\n${result.bibleCharacter.name}\n${result.bibleCharacter.description}`
     : ''
 
-  const shareText = `[나의 MBTI 결과] ${result.type} - ${result.title}\n\n[성격 특징]\n${result.description}\n\n[주요 특성]\n${result.characteristics.join(', ')}${bibleText}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
+  const shortText = `[나의 MBTI 결과] ${result.type} - ${result.title}\n\n[주요 특성]\n${result.characteristics.join(', ')}${bibleText}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
 
-  const handleNativeShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'MBTI 테스트 결과',
-        text: `나의 MBTI는 ${result.type} (${result.title})입니다!`,
-        url: window.location.href
-      })
-    } else {
-      handleCopyURL()
-    }
-  }
+  const detailText = `[나의 MBTI 결과] ${result.type} - ${result.title}\n\n[성격 특징]\n${result.description}\n\n[주요 특성]\n${result.characteristics.join(', ')}${bibleText}\n\n나도 테스트해보기 → ${window.location.origin}${window.location.pathname}`
 
-  const handleCopyURL = async () => {
+  const handleCopy = async (text, type) => {
     try {
-      await navigator.clipboard.writeText(shareText)
+      await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setCopiedType(type)
+      setTimeout(() => { setCopied(false); setCopiedType('') }, 2000)
     } catch (err) {
       alert('복사에 실패했습니다. 다시 시도해주세요.')
     }
@@ -119,13 +112,13 @@ function Result({ result, onRestart }) {
 
         {copied && (
           <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl text-center">
-            ✓ 클립보드에 복사되었습니다!
+            ✓ {copiedType} 클립보드에 복사되었습니다!
           </div>
         )}
 
         <div className="space-y-4">
           <button
-            onClick={handleCopyURL}
+            onClick={() => handleCopy(shortText, '결과가')}
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,13 +128,13 @@ function Result({ result, onRestart }) {
           </button>
 
           <button
-            onClick={handleNativeShare}
+            onClick={() => handleCopy(detailText, '상세 결과가')}
             className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-green-500 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            공유하기
+            결과 상세 복사하기
           </button>
 
           <button
