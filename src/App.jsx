@@ -1,9 +1,32 @@
 import { useState, useEffect } from 'react'
-import { questionsShort, questionsFull } from './data/questions'
+import { getRandomQuestions } from './data/questions'
 import { mbtiDescriptions } from './data/results'
 import StartScreen from './components/StartScreen'
 import Question from './components/Question'
 import Result from './components/Result'
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
+
+function buildResult(type, scores) {
+  const desc = mbtiDescriptions[type]
+  const char = pickRandom(desc.bibleCharacters)
+  const figure = pickRandom(desc.historicalFigures)
+  return {
+    type,
+    title: char.title,
+    description: char.description,
+    characteristics: char.characteristics,
+    bibleCharacter: {
+      id: char.id,
+      name: char.name,
+      description: char.bibleDescription
+    },
+    historicalFigure: figure,
+    scores
+  }
+}
 
 function App() {
   const [started, setStarted] = useState(false)
@@ -16,16 +39,12 @@ function App() {
     const params = new URLSearchParams(window.location.search)
     const type = params.get('type')?.toUpperCase()
     if (type && mbtiDescriptions[type]) {
-      setResult({
-        type,
-        ...mbtiDescriptions[type],
-        scores: { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 }
-      })
+      setResult(buildResult(type, { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 }))
     }
   }, [])
 
   const handleStart = (version) => {
-    setQuestions(version === "full" ? questionsFull : questionsShort)
+    setQuestions(getRandomQuestions(version === "full" ? 24 : 12))
     setStarted(true)
   }
 
@@ -53,11 +72,7 @@ function App() {
       (scores.T >= scores.F ? 'T' : 'F') +
       (scores.J >= scores.P ? 'J' : 'P')
 
-    setResult({
-      type: mbtiType,
-      ...mbtiDescriptions[mbtiType],
-      scores
-    })
+    setResult(buildResult(mbtiType, scores))
   }
 
   const handleRestart = () => {

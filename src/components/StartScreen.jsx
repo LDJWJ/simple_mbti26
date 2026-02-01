@@ -36,14 +36,14 @@ function StartScreen({ onStart }) {
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 px-8 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-105 shadow-lg"
           >
             간단 테스트 (12문항)
-            <span className="block text-sm font-normal mt-1 opacity-90">빠르게 결과 확인</span>
+            <span className="block text-sm font-normal mt-1 opacity-90">매번 새로운 문항 출제</span>
           </button>
           <button
             onClick={() => onStart("full")}
             className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-4 px-8 rounded-xl hover:from-indigo-600 hover:to-purple-600 transition-all transform hover:scale-105 shadow-lg"
           >
             정밀 테스트 (24문항)
-            <span className="block text-sm font-normal mt-1 opacity-90">더 정확한 결과</span>
+            <span className="block text-sm font-normal mt-1 opacity-90">더 많은 문항으로 정확하게</span>
           </button>
         </div>
       </div>
